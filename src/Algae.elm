@@ -9,6 +9,8 @@ import Keyboard
 import String
 import Text
 
+import Algae.Controller as Controller exposing (Controller)
+
 main =
   App.program
     { init = init
@@ -20,7 +22,7 @@ main =
 -- Model
 
 type alias Model =
-  { pos : (Int, Int)
+  { controller : Controller
   , state : State
   }
 
@@ -30,34 +32,38 @@ type State
 
 init : (Model, Cmd Msg)
 init =
-  ({pos = (0, 0), state = Default}, Cmd.none)
+  ( { controller = Controller.new
+    , state = Default
+    }
+  , Cmd.none
+  )
 
 -- update
 
 type Msg
-  = Key Char
+  = Key Char Bool
   | Quit
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   ( case msg of
-    Key char ->
+    Key char state ->
       let
-        (oldX, oldY) = model.pos
+        cont = model.controller
       in
         { model
-        | pos =
+        | controller =
           case char of
-          'a' ->
-            (oldX - 1, oldY)
-          's' ->
-            (oldX, oldY - 1)
-          'd' ->
-            (oldX + 1, oldY)
           'w' ->
-            (oldX, oldY + 1)
+            Controller.analog Controller.Up state cont
+          's' ->
+            Controller.analog Controller.Down state cont
+          'a' ->
+            Controller.analog Controller.Left state cont
+          'd' ->
+            Controller.analog Controller.Right state cont
           _ ->
-            (oldX, oldY)
+            cont
         , state =
           case char of
           ' ' ->
@@ -74,14 +80,17 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-  Keyboard.presses (\code -> Key <| Char.fromCode code)
+  Sub.batch
+  [ Keyboard.presses (\code -> Key (Char.fromCode code) True)
+  , Keyboard.ups (\code -> Key (Char.fromCode code) True)
+  ]
 
 -- view
 
 view : Model -> Html Msg
 view model =
   let
-    (x, y) = model.pos
+    (x, y) = Controller.analogStick model.controller
   in
     Collage.collage 800 600
       [ model
