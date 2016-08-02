@@ -21,11 +21,16 @@ main =
 
 type alias Model =
   { pos : (Int, Int)
+  , state : State
   }
+
+type State
+  = Default
+  | Attacking
 
 init : (Model, Cmd Msg)
 init =
-  ({pos = (0, 0)}, Cmd.none)
+  ({pos = (0, 0), state = Default}, Cmd.none)
 
 -- update
 
@@ -53,6 +58,12 @@ update msg model =
             (oldX, oldY + 1)
           _ ->
             (oldX, oldY)
+        , state =
+          case char of
+          ' ' ->
+            Attacking
+          _ ->
+            Default
         }
     Quit ->
       model
