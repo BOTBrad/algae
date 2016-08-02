@@ -1,10 +1,13 @@
 module Algae exposing (..)
 
 import Char
+import Collage
+import Element
 import Html exposing (Html)
 import Html.App as App
 import Keyboard
 import String
+import Text
 
 main =
   App.program
@@ -66,6 +69,10 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view model =
-  model
-  |> toString
-  |> Html.text
+  Collage.collage 800 600
+    [ model
+      |> toString
+      |> Text.fromString
+      |> Collage.text
+    ]
+    |> Element.toHtml
