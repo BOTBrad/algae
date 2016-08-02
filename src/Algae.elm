@@ -69,10 +69,14 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view model =
-  Collage.collage 800 600
-    [ model
-      |> toString
-      |> Text.fromString
-      |> Collage.text
-    ]
-    |> Element.toHtml
+  let
+    (x, y) = model.pos
+  in
+    Collage.collage 800 600
+      [ model
+        |> toString
+        |> Text.fromString
+        |> Collage.text
+        |> Collage.move (toFloat x, toFloat y)
+      ]
+      |> Element.toHtml
