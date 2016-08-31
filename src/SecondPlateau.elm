@@ -54,13 +54,13 @@ update msg model =
         { model
         | controller =
           case char of
-          'w' ->
+          'W' ->
             Controller.analog Controller.Up state cont
-          's' ->
+          'S' ->
             Controller.analog Controller.Down state cont
-          'a' ->
+          'A' ->
             Controller.analog Controller.Left state cont
-          'd' ->
+          'D' ->
             Controller.analog Controller.Right state cont
           _ ->
             cont
@@ -81,8 +81,8 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
   Sub.batch
-  [ Keyboard.presses (\code -> Key (Char.fromCode code) True)
-  , Keyboard.ups (\code -> Key (Char.fromCode code) True)
+  [ Keyboard.downs (\code -> Key (Char.fromCode code) True)
+  , Keyboard.ups (\code -> Key (Char.fromCode code) False)
   ]
 
 -- view
