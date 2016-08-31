@@ -1,4 +1,4 @@
-module Algae exposing (..)
+module SecondPlateau exposing (..)
 
 import Char
 import Collage
@@ -9,7 +9,7 @@ import Keyboard
 import String
 import Text
 
-import Algae.Controller as Controller exposing (Controller)
+import SecondPlateau.Controller as Controller exposing (Controller)
 
 main =
   App.program

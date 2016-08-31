@@ -1,4 +1,4 @@
-module Algae.Controller exposing
+module SecondPlateau.Controller exposing
   ( Controller
   , Direction(..)
   , DPad
